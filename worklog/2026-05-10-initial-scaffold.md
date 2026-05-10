@@ -48,4 +48,4 @@
 
 ## 관련 커밋
 
-- (커밋 후 해시 추가 예정)
+- `bb17d51` feat: initial Flask scaffold with 3 APIs, tests, and Swagger UI
