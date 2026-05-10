@@ -8,6 +8,9 @@
 
 ## 📋 목차
 
+- [Quick Start (실행 방법)](#-quick-start-실행-방법)
+- [테스트](#-테스트)
+- [Swagger UI](#-swagger-ui)
 - [프로젝트 한 줄 요약](#-프로젝트-한-줄-요약)
 - [전체 시스템 구조](#-전체-시스템-구조)
 - [동작 흐름 (사용 시나리오)](#-동작-흐름-사용-시나리오)
@@ -18,6 +21,62 @@
 - [구현 우선순위 (성능보다 완성)](#️-구현-우선순위-성능보다-완성)
 - [추천 진행 순서](#️-추천-진행-순서)
 - [결정이 필요한 항목](#-결정이-필요한-항목)
+
+---
+
+## 🚀 Quick Start (실행 방법)
+
+```bash
+git clone https://github.com/ajou-udangtangtang/subway-navigation-server.git
+cd subway-navigation-server
+
+python3 -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+
+cp .env.example .env               # DB 자격증명 등 수정 (Team B 영역)
+python app.py
+```
+
+서버는 `http://localhost:5000` 에서 응답합니다.
+
+```bash
+# 스모크 테스트
+curl -X POST http://localhost:5000/direction \
+  -H "Content-Type: application/json" \
+  -d '{"from":"A","to":"B"}'
+# → {"angle": 90.0}
+
+curl -X POST http://localhost:5000/route \
+  -H "Content-Type: application/json" \
+  -d '{"from":"A","to":"F"}'
+# → {"path":["A","B","C","D","F"]}   (위험노드 E는 자동 제외)
+```
+
+> **주의**: `/locate` 는 Team B의 KNN 모듈이 등록되기 전까지 `KNN_ERROR` (500) 을 반환합니다 — 의도된 동작입니다.
+
+---
+
+## 🧪 테스트
+
+```bash
+pytest                     # 전체
+pytest tests/unit -q       # 단위 테스트 (빠름)
+pytest tests/integration   # API 통합 테스트
+```
+
+테스트는 **MySQL이 필요 없습니다** — `TestConfig` 가 격리하고 `fake_estimator` fixture 가 KNN 호출을 차단합니다.
+
+---
+
+## 📖 Swagger UI
+
+서버 실행 후 브라우저로 접속:
+
+- Swagger UI: **http://localhost:5000/apidocs**
+- OpenAPI JSON: http://localhost:5000/apispec_1.json (Postman 등으로 import 가능)
+
+`docs/05-API명세.md` 가 source of truth이며, Swagger spec 은 그 미러링입니다. 변경 시 docs 먼저 수정 후 endpoint docstring 동기화.
 
 ---
 
