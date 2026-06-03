@@ -57,3 +57,4 @@
 | 2026-05-28 | [KNN 측위 개선: 마스킹 거리 (화경, dropout 21%→87.5%)](./2026-05-28-knn-masked-distance.md) |
 | 2026-05-31 | [PR #3 main 동기화 + 라이브 서버 갱신](./2026-05-31-pull-knn-update-restart.md) |
 | 2026-06-03 | [통합 테스트 진척·이슈 동기화 + 현장 미팅 준비](./2026-06-03-integration-issues-and-onsite-prep.md) |
+| 2026-06-03 | [API 로그에 한국어 위치 라벨 추가 (현장 디버깅용)](./2026-06-03-2-korean-location-log.md) |

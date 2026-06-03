@@ -14,10 +14,21 @@ from flask import Flask, g, request
 _SKIP_PREFIXES = ("/apidocs", "/flasgger", "/apispec", "/static")
 
 
+def _load_node_labels(app: Flask) -> dict[str, str]:
+    """노드 ID → 한국어 description 매핑 (로그 가독성용). 실패 시 빈 dict."""
+    try:
+        data_dir = Path(app.config.get("DATA_DIR", "data"))
+        nodes = json.loads((data_dir / "nodes.json").read_text(encoding="utf-8"))
+        return {nid: meta.get("description", nid) for nid, meta in nodes.items()}
+    except Exception:
+        return {}
+
+
 def init_access_log(app: Flask) -> None:
     logs_dir = Path(app.config.get("DATA_DIR", ".")).parent / "logs"
     logs_dir.mkdir(exist_ok=True)
     logfile = logs_dir / "api.jsonl"
+    node_labels = _load_node_labels(app)
 
     logger = logging.getLogger("subway.access")
     if not logger.handlers:
@@ -62,6 +73,17 @@ def init_access_log(app: Flask) -> None:
             "remote": request.headers.get("X-Forwarded-For", request.remote_addr),
             "ua": request.headers.get("User-Agent", "")[:80],
         }
+        # 현재 위치를 한국어로 보기 쉽게 (로그 분석용 추가 필드)
+        if isinstance(res_body, dict) and node_labels:
+            node = res_body.get("node")
+            if node:
+                record["node_kr"] = node_labels.get(node, node)
+            path_nodes = res_body.get("path")
+            if isinstance(path_nodes, list):
+                ids = [n.get("node") if isinstance(n, dict) else n for n in path_nodes]
+                record["path_kr"] = " → ".join(
+                    node_labels.get(n, str(n)) for n in ids if n is not None
+                )
         logger.info(json.dumps(record, ensure_ascii=False))
         return response
 
