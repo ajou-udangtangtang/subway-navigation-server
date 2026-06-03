@@ -94,7 +94,7 @@ def test_dijkstra_multi_hop(graph):
     assert path[0] == "station_exit"
     assert path[-1] == "b1_stairs"
     assert "fare_gate" in path
-    assert "stairs_mid" in path
+    assert "floor1_stairs" in path
 
 
 def test_dijkstra_invalid_from_raises(graph):
@@ -120,8 +120,8 @@ def test_dijkstra_no_route_for_isolated(graph):
 def test_dijkstra_cost_is_hop_count(graph):
     # station_exit → b1_stairs 의 경로 길이는 hop 수 기반
     path = dijkstra(graph, "station_exit", "b1_stairs")
-    # 5노드 그래프에서 최단 경로 = 4 hops (station_exit→fare_gate→floor1_stairs→stairs_mid→b1_stairs)
-    assert len(path) == 5
+    # 4노드 경로 = 3 hops (station_exit→fare_gate→floor1_stairs→b1_stairs)
+    assert len(path) == 4
 
 
 # -- direction lookup -------------------------------------------------
@@ -149,7 +149,7 @@ def test_edge_lookup_flat(graph):
 
 
 def test_edge_lookup_stairs(graph):
-    e = graph.edge("stairs_mid", "b1_stairs")
+    e = graph.edge("floor1_stairs", "b1_stairs")
     assert e is not None
     assert e.edge_type == "stairs"
 

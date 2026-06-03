@@ -69,7 +69,7 @@ def test_route_missing_field_returns_400(client):
 
 def test_route_no_danger_destination_error(client):
     # 어떤 입력에도 DANGER_DESTINATION 코드 나오지 않음 (회귀 방지)
-    for to_node in ["fare_gate", "stairs_mid", "b1_stairs"]:
+    for to_node in ["fare_gate", "b1_stairs"]:
         res = client.post("/route", json={"from": "station_exit", "to": to_node})
         if "error" in (res.get_json() or {}):
             assert res.get_json()["error"]["code"] != "DANGER_DESTINATION"

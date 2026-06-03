@@ -61,3 +61,4 @@
 | 2026-06-03 | [1층홀 제거 PR 후속: 테스트·docs·DB 정합화](./2026-06-03-3-floor1hall-removal-followup.md) |
 | 2026-06-03 | [/locate 에 '지나온 노드 제외'(exclude/passed) 옵션 추가](./2026-06-03-4-locate-exclude-passed-nodes.md) |
 | 2026-06-03 | [/locate 경로 기반 스무딩 (뒤로 금지 + 한 칸 전진)](./2026-06-03-5-locate-smoothing.md) |
+| 2026-06-03 | [층사이계단(stairs_mid) 노드 제거 (계단 단순화)](./2026-06-03-6-remove-stairs-mid.md) |

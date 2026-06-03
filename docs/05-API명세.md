@@ -157,7 +157,6 @@ flowchart LR
     { "node": "station_exit",        "floor": "ground", "zone": "entrance", "edge_to_next": "flat" },
     { "node": "fare_gate",           "floor": "1F",     "zone": "gate",     "edge_to_next": "flat" },
     { "node": "floor1_stairs",       "floor": "1F",     "zone": "stairs",   "edge_to_next": "stairs" },
-    { "node": "stairs_mid",          "floor": "mid",    "zone": "stairs",   "edge_to_next": "stairs" },
     { "node": "b1_stairs",           "floor": "B1",     "zone": "stairs",   "edge_to_next": "flat" },
     { "node": "b1_elevator",         "floor": "B1",     "zone": "hall",     "edge_to_next": "flat" },
     { "node": "b1_down_stairs_front","floor": "B1",     "zone": "branch",   "edge_to_next": "branch" },

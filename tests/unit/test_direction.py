@@ -43,11 +43,11 @@ def test_find_direction_reverse_direction(graph):
 
 
 def test_find_direction_stairs_node(graph):
-    # 계단 사이의 양방향 확인
-    d_up = graph.direction("floor1_stairs", "stairs_mid")
-    d_down = graph.direction("stairs_mid", "floor1_stairs")
-    assert d_up is not None and d_up.heading_degrees == 321
-    assert d_down is not None and d_down.heading_degrees == 182
+    # 계단 양방향 확인 (1층계단 ↔ 지하계단, stairs_mid 제거 후 직접 연결)
+    d_down = graph.direction("floor1_stairs", "b1_stairs")
+    d_up = graph.direction("b1_stairs", "floor1_stairs")
+    assert d_down is not None and d_down.heading_degrees == 321
+    assert d_up is not None and d_up.heading_degrees == 323
 
 
 def test_find_direction_missing_pair_returns_none(graph):
