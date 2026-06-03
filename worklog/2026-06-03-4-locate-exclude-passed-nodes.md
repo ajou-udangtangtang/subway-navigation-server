@@ -26,10 +26,14 @@
 - 실 서버 검증: /route→/locate=개찰구(정상) → /direction(개찰구→계단)→/locate=**계단** ✓ → 새 /route 시 리셋.
 - ⚠️ 단일 시연폰 전역 상태, 단조 진행(되돌리기 약함). 앱 재시작/서버 재시작 후엔 앱이 /route 한 번 다시 불러야 시드됨.
 
+## 현장 결과 (16:30~)
+- **B안 결함 발견·폐기**: 자동추론이 출발노드(출입구)도 제외 → 시작위치 못 잡음. AUTO_EXCLUDE_PASSED 기본 OFF 로 전환(코드는 둠).
+- **A안 채택·동작 확인**: 최수빈이 앱에서 /locate 에 passed 전송하도록 수정. 진행 정상: 출입구→개찰구→1층계단→층사이계단→지하계단→엘리베이터. ✅
+- 개선 여지: 앱이 passed 를 **직전 1개만** 보냄(`['fare_gate']`) → 개찰구→계단 구간서 출입구 ~30초 잠깐 튐(개찰구만 빼면 출입구가 2등). **지나온 노드 전체**(`['station_exit','fare_gate']`)를 보내면 해소.
+
 ## 다음에 할 일
-- 폰 라이브 확인: 앱이 /route 재호출(목적지 재선택)하면 자동 적용됨
-- 안되면 A안(앱이 passed 직접 전송)
-- 화경 knn.py 정식 exclude 반영 시 locate_filter.py/nav_progress.py 정리
+- (앱) passed 를 누적 전체 리스트로 전송 → gate→stairs 흔들림 제거
+- 화경 knn.py 정식 exclude 반영 시 locate_filter.py 정리, nav_progress.py(B) 제거 검토
 
 ## 관련 커밋
 - feat(locate): exclude/passed 옵션 추가 + locate_filter 헬퍼

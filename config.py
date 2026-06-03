@@ -19,10 +19,11 @@ class Config:
 
     KNN_K = int(os.getenv("KNN_K", "5"))
 
-    # [임시/시연] /route·/direction 진행상황으로 '지나온 노드'를 자동 추론해
-    # /locate 에서 제외 (개찰구 지나도 개찰구 고정되는 문제 완화).
-    # 앱이 명시적 passed/exclude 를 보내면 그게 우선. 끄려면 0.
-    AUTO_EXCLUDE_PASSED = os.getenv("AUTO_EXCLUDE_PASSED", "1") == "1"
+    # [실험/기본 OFF] /route·/direction 진행상황으로 '지나온 노드'를 자동 추론해
+    # /locate 에서 제외. ⚠️ 결함: 출발 노드(출입구)도 제외해 시작 위치를 못 잡음.
+    # → 기본 OFF. 앱이 명시적 passed/exclude 를 보내는 방식(권장)이 이 플래그와
+    #   무관하게 항상 동작하므로 그쪽을 사용. 켜려면 AUTO_EXCLUDE_PASSED=1.
+    AUTO_EXCLUDE_PASSED = os.getenv("AUTO_EXCLUDE_PASSED", "0") == "1"
 
     TESTING = False
 
