@@ -56,3 +56,4 @@
 | 2026-05-25 | [API 명세↔구현 정합성 점검 + 수정 (rssi float / SSID 필터 / 문서 3건)](./2026-05-25-api-spec-consistency.md) |
 | 2026-05-28 | [KNN 측위 개선: 마스킹 거리 (화경, dropout 21%→87.5%)](./2026-05-28-knn-masked-distance.md) |
 | 2026-05-31 | [PR #3 main 동기화 + 라이브 서버 갱신](./2026-05-31-pull-knn-update-restart.md) |
+| 2026-06-03 | [통합 테스트 진척·이슈 동기화 + 현장 미팅 준비](./2026-06-03-integration-issues-and-onsite-prep.md) |
