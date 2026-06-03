@@ -1,7 +1,7 @@
 from flask import current_app, jsonify, request
 
 from ..core.graph import GraphData, dijkstra
-from ..core import nav_progress
+from ..core import nav_progress, nav_smoother
 from . import bp
 from .errors import InvalidPayloadError
 
@@ -78,6 +78,9 @@ def route():
     # [임시/시연] 새 경로 = 새 내비게이션 세션 (지나온 노드 자동제외 추적 리셋)
     if current_app.config.get("AUTO_EXCLUDE_PASSED"):
         nav_progress.set_route(path_nodes)
+    # [시연] 측위 스무딩용 경로 세팅 (뒤로금지+1칸전진)
+    if current_app.config.get("SMOOTH_LOCATE"):
+        nav_smoother.set_route(path_nodes)
 
     enriched: list[dict] = []
     for i, nid in enumerate(path_nodes):

@@ -1,6 +1,6 @@
 from flask import current_app, jsonify, request
 
-from ..core import nav_progress
+from ..core import nav_progress, nav_smoother
 from ..core.locate_filter import estimate_excluding
 from ..core.locator import WifiSample, estimate
 from . import bp
@@ -134,5 +134,9 @@ def locate():
         raise KnnError(str(e)) from e
     except Exception as e:
         raise KnnError(f"Estimator failed: {e}") from e
+
+    # [시연] 경로 기반 스무딩: 뒤로 금지 + 한 칸씩 전진 (흔들림/먼점프 흡수).
+    if current_app.config.get("SMOOTH_LOCATE"):
+        node_id = nav_smoother.smooth(node_id)
 
     return jsonify(node=node_id)
