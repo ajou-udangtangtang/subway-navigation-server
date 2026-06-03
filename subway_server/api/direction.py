@@ -29,11 +29,11 @@ def direction():
               description: 현재 노드 ID (location)
             to:
               type: string
-              example: "floor1_hall"
+              example: "fare_gate"
               description: 다음 노드 ID (직접 연결되어 있어야 함)
           example:
             from: "station_exit"
-            to: "floor1_hall"
+            to: "fare_gate"
     responses:
       200:
         description: 절대 방위각 + 8방위 + 시계 방향

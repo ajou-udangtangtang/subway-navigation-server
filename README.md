@@ -46,7 +46,7 @@ python app.py
 # 스모크 테스트
 curl -X POST http://localhost:5000/direction \
   -H "Content-Type: application/json" \
-  -d '{"from":"station_exit","to":"floor1_hall"}'
+  -d '{"from":"station_exit","to":"fare_gate"}'
 # → {"angle": 268, "cardinal": "W", "clock": 9}
 
 curl -X POST http://localhost:5000/route \

@@ -20,23 +20,23 @@ def graph() -> GraphData:
 
 
 def test_find_direction_basic(graph):
-    d = graph.direction("station_exit", "floor1_hall")
+    d = graph.direction("station_exit", "fare_gate")
     assert d is not None
     assert d.heading_degrees == 268
 
 
 def test_find_direction_returns_cardinal(graph):
-    d = graph.direction("station_exit", "floor1_hall")
+    d = graph.direction("station_exit", "fare_gate")
     assert d.cardinal == "W"
 
 
 def test_find_direction_returns_clock(graph):
-    d = graph.direction("station_exit", "floor1_hall")
+    d = graph.direction("station_exit", "fare_gate")
     assert d.clock_position == 9
 
 
 def test_find_direction_reverse_direction(graph):
-    d = graph.direction("floor1_hall", "station_exit")
+    d = graph.direction("fare_gate", "station_exit")
     assert d is not None
     assert d.heading_degrees == 81
     assert d.cardinal == "E"

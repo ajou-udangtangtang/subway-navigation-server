@@ -160,7 +160,7 @@ python app.py
 ```bash
 curl -X POST http://127.0.0.1:5000/direction \
   -H "Content-Type: application/json" \
-  -d '{"from":"station_exit","to":"floor1_hall"}'
+  -d '{"from":"station_exit","to":"fare_gate"}'
 # → {"angle":268,"cardinal":"W","clock":9}
 ```
 

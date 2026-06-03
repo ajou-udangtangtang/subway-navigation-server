@@ -14,7 +14,7 @@ def test_health(live_server):
 def test_direction_real_data(live_server):
     r = requests.post(
         f"{live_server}/direction",
-        json={"from": "station_exit", "to": "floor1_hall"},
+        json={"from": "station_exit", "to": "fare_gate"},
         timeout=5,
     )
     assert r.status_code == 200
@@ -27,7 +27,7 @@ def test_direction_real_data(live_server):
 def test_direction_cardinal_field(live_server):
     r = requests.post(
         f"{live_server}/direction",
-        json={"from": "floor1_hall", "to": "station_exit"},
+        json={"from": "fare_gate", "to": "station_exit"},
         timeout=5,
     )
     assert r.status_code == 200

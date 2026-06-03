@@ -30,8 +30,8 @@ def graph() -> GraphData:
 def test_load_graph_reads_all_three_files(graph):
     assert "station_exit" in graph.nodes
     assert graph.nodes["station_exit"].floor == "ground"
-    assert ("station_exit", "floor1_hall") in graph.edge_lookup
-    assert ("station_exit", "floor1_hall") in graph.directions
+    assert ("station_exit", "fare_gate") in graph.edge_lookup
+    assert ("station_exit", "fare_gate") in graph.directions
 
 
 def test_load_graph_rejects_unknown_node_in_edges(tmp_path):
@@ -85,21 +85,21 @@ def test_load_graph_missing_directions_file(tmp_path):
 
 
 def test_dijkstra_simple_path(graph):
-    path = dijkstra(graph, "station_exit", "floor1_hall")
-    assert path == ["station_exit", "floor1_hall"]
+    path = dijkstra(graph, "station_exit", "fare_gate")
+    assert path == ["station_exit", "fare_gate"]
 
 
 def test_dijkstra_multi_hop(graph):
     path = dijkstra(graph, "station_exit", "b1_stairs")
     assert path[0] == "station_exit"
     assert path[-1] == "b1_stairs"
-    assert "floor1_hall" in path
+    assert "fare_gate" in path
     assert "stairs_mid" in path
 
 
 def test_dijkstra_invalid_from_raises(graph):
     with pytest.raises(InvalidNodeError):
-        dijkstra(graph, "ghost", "floor1_hall")
+        dijkstra(graph, "ghost", "fare_gate")
 
 
 def test_dijkstra_invalid_to_raises(graph):
@@ -120,15 +120,15 @@ def test_dijkstra_no_route_for_isolated(graph):
 def test_dijkstra_cost_is_hop_count(graph):
     # station_exit → b1_stairs 의 경로 길이는 hop 수 기반
     path = dijkstra(graph, "station_exit", "b1_stairs")
-    # 6노드 그래프에서 최단 경로 = 5 hops (station_exit→floor1_hall→fare_gate→floor1_stairs→stairs_mid→b1_stairs)
-    assert len(path) == 6
+    # 5노드 그래프에서 최단 경로 = 4 hops (station_exit→fare_gate→floor1_stairs→stairs_mid→b1_stairs)
+    assert len(path) == 5
 
 
 # -- direction lookup -------------------------------------------------
 
 
 def test_find_direction_returns_data(graph):
-    d = graph.direction("station_exit", "floor1_hall")
+    d = graph.direction("station_exit", "fare_gate")
     assert d is not None
     assert d.heading_degrees == 268
     assert d.cardinal == "W"
@@ -143,7 +143,7 @@ def test_find_direction_returns_none_for_invalid(graph):
 
 
 def test_edge_lookup_flat(graph):
-    e = graph.edge("station_exit", "floor1_hall")
+    e = graph.edge("station_exit", "fare_gate")
     assert e is not None
     assert e.edge_type == "flat"
 
@@ -162,7 +162,7 @@ def test_edge_lookup_returns_none_for_missing(graph):
 
 
 def test_assert_connected_adjacent(graph):
-    assert_connected(graph, "station_exit", "floor1_hall")  # no exception
+    assert_connected(graph, "station_exit", "fare_gate")  # no exception
 
 
 def test_assert_connected_not_adjacent(graph):

@@ -35,7 +35,7 @@ def test_route_path_includes_floor_metadata(client):
 
 
 def test_route_short_path(client):
-    res = client.post("/route", json={"from": "station_exit", "to": "floor1_hall"})
+    res = client.post("/route", json={"from": "station_exit", "to": "fare_gate"})
     path = res.get_json()["path"]
     assert len(path) == 2
 
@@ -69,7 +69,7 @@ def test_route_missing_field_returns_400(client):
 
 def test_route_no_danger_destination_error(client):
     # 어떤 입력에도 DANGER_DESTINATION 코드 나오지 않음 (회귀 방지)
-    for to_node in ["floor1_hall", "fare_gate", "stairs_mid", "b1_stairs"]:
+    for to_node in ["fare_gate", "stairs_mid", "b1_stairs"]:
         res = client.post("/route", json={"from": "station_exit", "to": to_node})
         if "error" in (res.get_json() or {}):
             assert res.get_json()["error"]["code"] != "DANGER_DESTINATION"

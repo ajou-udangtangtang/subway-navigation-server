@@ -155,7 +155,6 @@ flowchart LR
 {
   "path": [
     { "node": "station_exit",        "floor": "ground", "zone": "entrance", "edge_to_next": "flat" },
-    { "node": "floor1_hall",         "floor": "1F",     "zone": "hall",     "edge_to_next": "flat" },
     { "node": "fare_gate",           "floor": "1F",     "zone": "gate",     "edge_to_next": "flat" },
     { "node": "floor1_stairs",       "floor": "1F",     "zone": "stairs",   "edge_to_next": "stairs" },
     { "node": "stairs_mid",          "floor": "mid",    "zone": "stairs",   "edge_to_next": "stairs" },
@@ -207,7 +206,7 @@ flowchart LR
 ```json
 {
   "from": "station_exit",
-  "to": "floor1_hall"
+  "to": "fare_gate"
 }
 ```
 

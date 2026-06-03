@@ -1,18 +1,18 @@
 def test_direction_happy_path(client):
-    # station_exit → floor1_hall : 268° W 9시
-    res = client.post("/direction", json={"from": "station_exit", "to": "floor1_hall"})
+    # station_exit → fare_gate : 268° W 9시
+    res = client.post("/direction", json={"from": "station_exit", "to": "fare_gate"})
     assert res.status_code == 200
     assert res.get_json() == {"angle": 268, "cardinal": "W", "clock": 9}
 
 
 def test_direction_returns_three_fields(client):
-    res = client.post("/direction", json={"from": "floor1_hall", "to": "fare_gate"})
+    res = client.post("/direction", json={"from": "fare_gate", "to": "floor1_stairs"})
     body = res.get_json()
     assert set(body.keys()) == {"angle", "cardinal", "clock"}
 
 
 def test_direction_invalid_from_node_returns_400(client):
-    res = client.post("/direction", json={"from": "ghost", "to": "floor1_hall"})
+    res = client.post("/direction", json={"from": "ghost", "to": "fare_gate"})
     assert res.status_code == 400
     assert res.get_json()["error"]["code"] == "INVALID_NODE"
 
