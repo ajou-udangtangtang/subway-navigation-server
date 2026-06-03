@@ -25,9 +25,11 @@ class Config:
     #   무관하게 항상 동작하므로 그쪽을 사용. 켜려면 AUTO_EXCLUDE_PASSED=1.
     AUTO_EXCLUDE_PASSED = os.getenv("AUTO_EXCLUDE_PASSED", "0") == "1"
 
-    # [시연] 측위 결과 스무딩: 경로상 뒤로 금지 + 한 칸씩 전진 (흔들림/먼점프 흡수).
-    # /route 로 경로 세팅 후 동작. 끄려면 SMOOTH_LOCATE=0.
-    SMOOTH_LOCATE = os.getenv("SMOOTH_LOCATE", "1") == "1"
+    # [실험/기본 OFF] 측위 스무딩: 경로상 뒤로 금지 + 한 칸씩 전진.
+    # ⚠️ 결함: raw 가 한 번 앞으로 잘못 튀면 '뒤로 금지' 때문에 거기 고정돼
+    #   자가 교정이 안 됨(잘못된 위치 stuck). 뒤로튐은 잡지만 부작용이 큼 → 기본 OFF.
+    #   앱 누적 passed 만으로 충분히 동작. 켜려면 SMOOTH_LOCATE=1.
+    SMOOTH_LOCATE = os.getenv("SMOOTH_LOCATE", "0") == "1"
 
     TESTING = False
 
