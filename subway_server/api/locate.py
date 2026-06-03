@@ -1,5 +1,6 @@
 from flask import jsonify, request
 
+from ..core.locate_filter import estimate_excluding
 from ..core.locator import WifiSample, estimate
 from . import bp
 from .errors import EmptyWifiError, InvalidPayloadError, KnnError
@@ -33,11 +34,17 @@ def locate():
                   bssid: { type: string, example: "aa:bb:cc:dd:ee:ff", description: AP MAC 주소 }
                   rssi:  { type: number, example: -65, description: "신호 세기 (dBm). int·float 모두 허용 (평균값 float 가능)" }
                   ssid:  { type: string, example: "Korail_WiFi_Free", description: "AP 이름 (선택). 보내면 서버측 이동성 기기 필터가 활성화됨" }
+            exclude:
+              type: array
+              description: "(선택) 이미 지나온 노드 ID 목록. 보내면 해당 노드들을 후보에서 제외하고 추정 (예: 개찰구를 지났는데 계속 개찰구로 잡히는 문제 완화). 'passed' 로도 동일하게 동작. 누락 시 기존 동작."
+              items: { type: string }
+              example: ["station_exit", "fare_gate"]
           example:
             wifi:
               - { bssid: "aa:bb:cc:dd:ee:ff", rssi: -65, ssid: "Korail_WiFi_Free" }
               - { bssid: "11:22:33:44:55:66", rssi: -72, ssid: "Public WiFi Free" }
               - { bssid: "77:88:99:aa:bb:cc", rssi: -88, ssid: "U+zone" }
+            exclude: ["station_exit", "fare_gate"]
     responses:
       200:
         description: 추정된 노드 ID
@@ -98,8 +105,26 @@ def locate():
             raise InvalidPayloadError("'ssid' must be a string if provided")
         samples.append(WifiSample(bssid=bssid, rssi=float(rssi), ssid=ssid))
 
+    # 선택: 이미 지나온 노드(경로 진행상 통과한 노드)를 후보에서 제외.
+    # 'exclude' / 'passed' 둘 다 허용. 없으면 기존 동작과 100% 동일.
+    exclude_raw = payload.get("exclude")
+    if exclude_raw is None:
+        exclude_raw = payload.get("passed")
+    exclude: set[str] = set()
+    if exclude_raw is not None:
+        if not isinstance(exclude_raw, list) or not all(
+            isinstance(x, str) for x in exclude_raw
+        ):
+            raise InvalidPayloadError(
+                "'exclude'/'passed' must be a list of node id strings"
+            )
+        exclude = set(exclude_raw)
+
     try:
-        node_id = estimate(samples)
+        if exclude:
+            node_id = estimate_excluding(samples, exclude)
+        else:
+            node_id = estimate(samples)
     except NotImplementedError as e:
         raise KnnError(str(e)) from e
     except Exception as e:
