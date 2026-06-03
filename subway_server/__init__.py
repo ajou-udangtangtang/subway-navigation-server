@@ -41,6 +41,10 @@ def create_app(config_obj: type = Config) -> Flask:
     from .db.connection import init_db
     init_db(app)
 
+    # API 호출 로깅 (logs/api.jsonl) — 통합 테스트 정확도 분석용
+    from .access_log import init_access_log
+    init_access_log(app)
+
     register_error_handlers(app)
     register_blueprints(app)
     if not app.config.get("TESTING"):
