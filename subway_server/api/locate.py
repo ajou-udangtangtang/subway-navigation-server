@@ -1,5 +1,6 @@
-from flask import jsonify, request
+from flask import current_app, jsonify, request
 
+from ..core import nav_progress
 from ..core.locate_filter import estimate_excluding
 from ..core.locator import WifiSample, estimate
 from . import bp
@@ -119,6 +120,10 @@ def locate():
                 "'exclude'/'passed' must be a list of node id strings"
             )
         exclude = set(exclude_raw)
+    elif current_app.config.get("AUTO_EXCLUDE_PASSED"):
+        # [임시/시연] 앱이 명시 안 하면 /route·/direction 진행상황으로 추론한
+        # '지나온 노드'를 자동 제외 (nav_progress).
+        exclude = nav_progress.get_exclude()
 
     try:
         if exclude:

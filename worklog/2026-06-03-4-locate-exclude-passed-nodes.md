@@ -19,9 +19,18 @@
 - ⚠️ `locate_filter.py` 는 **임시 프로토타입**: knn.py(화경) 거리식을 복제하고 통합 seam(locator.estimate)을 우회함. 정식판은 화경이 `knn_estimate(samples, exclude=...)` 추가 시 이 파일 제거하고 seam 통해 호출로 교체. knn 거리식 변경 시 동기화 필요.
 - 앱(최수빈)이 `/locate` 에 `exclude`/`passed` 배열(지나온 노드 전체)을 실제로 보내야 폰에서 효과 발생. 현재는 서버 준비만 됨(미사용 시 무영향).
 
+## 추가: B안 — 앱 변경 없이 서버 자동추론 (nav_progress)
+앱이 아직 `passed` 를 안 보내서, 앱이 이미 부르는 `/route`·`/direction` 으로 진행상황을 추론:
+- `core/nav_progress.py` 신설: `/route`→경로 저장+리셋, `/direction(from)`→경로상 from 인덱스까지 진행(단조), `/locate`→경로 시작~진행인덱스(포함) 자동 제외.
+- `route.py`·`direction.py`·`locate.py` 에 훅 추가. `config.AUTO_EXCLUDE_PASSED`(prod ON, TestConfig OFF) 로 토글.
+- 실 서버 검증: /route→/locate=개찰구(정상) → /direction(개찰구→계단)→/locate=**계단** ✓ → 새 /route 시 리셋.
+- ⚠️ 단일 시연폰 전역 상태, 단조 진행(되돌리기 약함). 앱 재시작/서버 재시작 후엔 앱이 /route 한 번 다시 불러야 시드됨.
+
 ## 다음에 할 일
-- 인터페이스 합의: 앱이 `passed` 배열 전송 → 폰 라이브 테스트
-- 화경 knn.py 정식 exclude 반영 시 locate_filter.py 제거
+- 폰 라이브 확인: 앱이 /route 재호출(목적지 재선택)하면 자동 적용됨
+- 안되면 A안(앱이 passed 직접 전송)
+- 화경 knn.py 정식 exclude 반영 시 locate_filter.py/nav_progress.py 정리
 
 ## 관련 커밋
-- (이 커밋) feat(locate): exclude/passed 옵션 추가 + locate_filter 헬퍼
+- feat(locate): exclude/passed 옵션 추가 + locate_filter 헬퍼
+- (이 커밋) feat: nav_progress 로 /route·/direction 진행 추적 → /locate 자동 제외 (B안)

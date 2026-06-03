@@ -1,6 +1,7 @@
 from flask import current_app, jsonify, request
 
 from ..core.graph import GraphData, dijkstra
+from ..core import nav_progress
 from . import bp
 from .errors import InvalidPayloadError
 
@@ -73,6 +74,10 @@ def route():
 
     graph: GraphData = current_app.config["GRAPH"]
     path_nodes = dijkstra(graph, a, b)
+
+    # [임시/시연] 새 경로 = 새 내비게이션 세션 (지나온 노드 자동제외 추적 리셋)
+    if current_app.config.get("AUTO_EXCLUDE_PASSED"):
+        nav_progress.set_route(path_nodes)
 
     enriched: list[dict] = []
     for i, nid in enumerate(path_nodes):

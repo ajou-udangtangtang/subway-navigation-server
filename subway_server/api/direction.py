@@ -1,6 +1,7 @@
 from flask import current_app, jsonify, request
 
 from ..core.graph import GraphData
+from ..core import nav_progress
 from . import bp
 from .errors import InvalidNodeError, InvalidPayloadError, NotConnectedError
 
@@ -82,6 +83,10 @@ def direction():
         raise NotConnectedError(
             f"No direction data for {a!r} -> {b!r} (nodes not directly connected)"
         )
+
+    # [임시/시연] 앱이 from 노드로 안내 중 = 경로상 from 까지 지났다고 추론
+    if current_app.config.get("AUTO_EXCLUDE_PASSED"):
+        nav_progress.mark_from(a)
 
     return jsonify(
         angle=d.heading_degrees,
